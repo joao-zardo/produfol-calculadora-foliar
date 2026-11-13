@@ -48,3 +48,36 @@ def test_protecao_rotas_e_fluxo_autenticado():
     )
     assert resp_calc.status_code == 200
     assert "12.5 Litros" in resp_calc.get_data(as_text=True)
+
+
+def test_fluxo_cadastros_historico_e_logout():
+    app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:"})
+    client = app.test_client()
+
+    resp_erro = client.post("/login", data={"email": "janaina@produfol.com.br", "senha": "errada"})
+    assert "inválidos" in resp_erro.get_data(as_text=True)
+
+    client.post("/login", data={"email": "janaina@produfol.com.br", "senha": "Produfol2026"})
+    assert client.get("/").status_code == 200
+
+    resp_prod = client.post(
+        "/produtos",
+        data={"nome": "NanoFoliar K", "dose_padrao_ha": "1.0", "volume_embalagem": "5.0", "culturas_indicadas": "Soja"},
+    )
+    assert "Fertilizante cadastrado com sucesso!" in resp_prod.get_data(as_text=True)
+
+    resp_agric = client.post(
+        "/produtores",
+        data={"nome": "João Silva", "municipio": "Erechim/RS", "propriedade": "Sítio Verde"},
+    )
+    assert "Produtor rural cadastrado com sucesso!" in resp_agric.get_data(as_text=True)
+
+    client.post(
+        "/nova-recomendacao",
+        data={"id_produtor": 1, "id_produto": 1, "cultura": "Soja", "area_hectares": "25"},
+    )
+    resp_hist = client.get("/historico?q=Carlos")
+    assert "Carlos Alberto Mendes" in resp_hist.get_data(as_text=True)
+
+    resp_logout = client.get("/logout")
+    assert resp_logout.status_code == 302
