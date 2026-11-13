@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{ url_for('main.index') }}" class="btn btn-link px-0 mb-2">&lt; Voltar ao Menu</a>
+<h1 class="h4 mb-3">Resultado da Recomendação</h1>
+<div class="alert alert-success" role="status"><strong>Sucesso:</strong> Recomendação calculada e salva com sucesso!</div>
+<div class="card p-3 mb-3 border-success">
+  <p class="mb-1 fw-bold">{{ rec.produtor.nome }} — {{ rec.cultura }} ({{ rec.area_hectares }} ha)</p>
+  <p class="mb-2">{{ rec.produto.nome }} ({{ rec.produto.dose_padrao_ha }} L/ha)</p>
+  <div class="p-3 bg-light rounded">
+    <div class="fs-5 fw-bold">Volume Total: {{ rec.volume_total }} Litros</div>
+    <div class="fs-5 fw-bold">Embalagens: {{ rec.qtd_embalagens }} galões de {{ rec.produto.volume_embalagem }} L</div>
+  </div>
+</div>
+<label for="resumo" class="form-label fw-bold">Resumo para WhatsApp</label>
+<textarea id="resumo" class="form-control mb-3" rows="3" readonly>{{ resumo }}</textarea>
+<button type="button" class="btn btn-produfol w-100 mb-2" onclick="navigator.clipboard.writeText(document.getElementById('resumo').value)">
+  COPIAR PARA WHATSAPP
+</button>
+<a href="{{ url_for('main.nova_recomendacao') }}" class="btn btn-outline-dark w-100">+ Novo Cálculo</a>
+{% endblock %}
