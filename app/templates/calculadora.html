@@ -13,11 +13,17 @@
   </div>
   <div class="mb-3">
     <label for="id_produto" class="form-label fw-bold">Fertilizante Foliar *</label>
-    <select id="id_produto" name="id_produto" class="form-select" required>
+    <select id="id_produto" name="id_produto" class="form-select" required onchange="atualizarInfoProduto()">
       {% for prod in produtos %}
-        <option value="{{ prod.id }}">{{ prod.nome }} ({{ prod.dose_padrao_ha }} L/ha | Galão {{ prod.volume_embalagem }} L)</option>
+        <option value="{{ prod.id }}"
+                data-dose="{{ prod.dose_padrao_ha }}"
+                data-embalagem="{{ prod.volume_embalagem }}"
+                data-culturas="{{ prod.culturas_indicadas }}">
+          {{ prod.nome }} ({{ prod.dose_padrao_ha }} L/ha | Galão {{ prod.volume_embalagem }} L)
+        </option>
       {% endfor %}
     </select>
+    <div id="info-produto" class="alert alert-success py-2 px-3 mt-2 mb-0 small d-none" role="status"></div>
   </div>
   <div class="mb-3">
     <label for="cultura" class="form-label fw-bold">Cultura *</label>
@@ -35,4 +41,23 @@
   </div>
   <button type="submit" class="btn btn-produfol w-100">CALCULAR E SALVAR</button>
 </form>
+
+<script>
+  function atualizarInfoProduto() {
+    const select = document.getElementById('id_produto');
+    const opt = select.options[select.selectedIndex];
+    const box = document.getElementById('info-produto');
+    if (!opt || !opt.value) {
+      box.classList.add('d-none');
+      box.textContent = '';
+      return;
+    }
+    const dose = opt.getAttribute('data-dose');
+    const emb = opt.getAttribute('data-embalagem');
+    const culturas = opt.getAttribute('data-culturas');
+    box.innerHTML = `<strong>Ficha Técnica:</strong> Dose padrão de <strong>${dose} L/ha</strong> | Galão de <strong>${emb} L</strong> | Culturas indicadas: ${culturas}.`;
+    box.classList.remove('d-none');
+  }
+  document.addEventListener('DOMContentLoaded', atualizarInfoProduto);
+</script>
 {% endblock %}
