@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{ url_for('main.index') }}" class="btn btn-link px-0 mb-2">&lt; Voltar ao Menu</a>
+{% if modo == 'produtos' %}
+  <h1 class="h4 mb-3">Cadastrar Fertilizante</h1>
+  <form method="post" class="card p-3 mb-3">
+    <label for="nome" class="form-label fw-bold">Nome do Produto *</label>
+    <input id="nome" name="nome" class="form-control mb-2" required>
+    <label for="dose" class="form-label fw-bold">Dose Padrão (L/ha) *</label>
+    <input id="dose" name="dose_padrao_ha" type="number" step="0.01" min="0.01" class="form-control mb-2" required>
+    <label for="emb" class="form-label fw-bold">Volume da Embalagem (L) *</label>
+    <input id="emb" name="volume_embalagem" type="number" step="0.1" min="0.1" class="form-control mb-3" required>
+    <button class="btn btn-produfol w-100">Salvar Fertilizante</button>
+  </form>
+  {% for p in produtos %}<div class="card p-2 mb-2">{{ p.nome }} — {{ p.dose_padrao_ha }} L/ha (Galão {{ p.volume_embalagem }} L)</div>{% endfor %}
+{% elif modo == 'produtores' %}
+  <h1 class="h4 mb-3">Cadastrar Produtor Rural</h1>
+  <form method="post" class="card p-3 mb-3">
+    <label for="nome" class="form-label fw-bold">Nome Completo *</label>
+    <input id="nome" name="nome" class="form-control mb-2" required>
+    <label for="mun" class="form-label fw-bold">Município *</label>
+    <input id="mun" name="municipio" class="form-control mb-2" required>
+    <label for="prop" class="form-label fw-bold">Propriedade</label>
+    <input id="prop" name="propriedade" class="form-control mb-3">
+    <button class="btn btn-produfol w-100">Salvar Produtor</button>
+  </form>
+  {% for p in produtores %}<div class="card p-2 mb-2">{{ p.nome }} — {{ p.municipio }}</div>{% endfor %}
+{% else %}
+  <h1 class="h4 mb-3">Histórico de Recomendações</h1>
+  <form method="get" class="d-flex gap-2 mb-3">
+    <input name="q" value="{{ busca }}" class="form-control" placeholder="Filtrar por produtor...">
+    <button class="btn btn-produfol">Buscar</button>
+  </form>
+  {% for r in recomendacoes %}
+    <div class="card p-2 mb-2">
+      <strong>{{ r.produtor.nome }}</strong> — {{ r.produto.nome }} ({{ r.area_hectares }} ha)<br>
+      Total: {{ r.volume_total }} L | {{ r.qtd_embalagens }} galões
+    </div>
+  {% endfor %}
+{% endif %}
+{% endblock %}
