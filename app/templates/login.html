@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm p-4">
+  <h1 class="h4 mb-3">Acesso Técnico Produfol</h1>
+  <form method="post">
+    <div class="mb-3">
+      <label for="email" class="form-label fw-bold">E-mail corporativo *</label>
+      <input type="email" id="email" name="email" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="senha" class="form-label fw-bold">Senha *</label>
+      <input type="password" id="senha" name="senha" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-produfol w-100">Entrar</button>
+  </form>
+</div>
+{% endblock %}
