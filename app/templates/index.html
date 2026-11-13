@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-3 mb-3 border-success">
+  <h1 class="h5 mb-1">Olá, {{ session.get('usuario_nome') }}!</h1>
+  <p class="mb-0 text-muted">Painel Técnico — Lagoa Vermelha/RS</p>
+</div>
+<a href="{{ url_for('main.nova_recomendacao') }}" class="btn btn-produfol w-100 py-3 mb-3 fs-5">
+  NOVA RECOMENDAÇÃO (Cálculo por Hectare)
+</a>
+<div class="d-grid gap-2">
+  <a href="{{ url_for('main.produtores') }}" class="btn btn-outline-dark text-start">Cadastrar Produtor</a>
+  <a href="{{ url_for('main.produtos') }}" class="btn btn-outline-dark text-start">Cadastrar Fertilizante</a>
+  <a href="{{ url_for('main.historico') }}" class="btn btn-outline-dark text-start">Histórico de Recomendações</a>
+</div>
+{% endblock %}
