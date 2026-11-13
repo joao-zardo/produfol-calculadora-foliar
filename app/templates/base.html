@@ -12,18 +12,28 @@
     .btn-produfol:hover { background-color: #0e3322; color: #ffffff; }
     .form-control, .form-select, .btn { min-height: 48px; }
     :focus-visible { outline: 3px solid #f59e0b !important; outline-offset: 2px; }
+    body.acessivel { background-color: #000000 !important; color: #ffffff !important; font-size: 20px !important; }
+    body.acessivel .card, body.acessivel .bg-light, body.acessivel .form-control, body.acessivel .form-select {
+      background-color: #111111 !important; color: #ffeb3b !important; border: 2px solid #ffeb3b !important; font-size: 20px !important;
+    }
+    body.acessivel .bg-produfol, body.acessivel .btn-produfol {
+      background-color: #ffeb3b !important; color: #000000 !important; border: 2px solid #ffffff !important; font-weight: 700;
+    }
+    body.acessivel .btn-outline-dark, body.acessivel .btn-link { color: #ffeb3b !important; border-color: #ffeb3b !important; }
   </style>
 </head>
 <body>
   <header class="bg-produfol py-3 px-3 mb-3">
     <div class="container d-flex justify-content-between align-items-center" style="max-width: 540px;">
-      <strong>PRODUFOL — Recomendação Foliar</strong>
-      {% if session.get('usuario_nome') %}
-        <div>
-          <span class="me-2 small">{{ session.get('usuario_nome') }}</span>
+      <strong>PRODUFOL — Foliar</strong>
+      <div class="d-flex align-items-center gap-2">
+        <button type="button" id="btn-a11y" class="btn btn-sm btn-warning fw-bold" style="min-height: 36px;" onclick="toggleA11y()" aria-pressed="false">
+          Alto Contraste / A+
+        </button>
+        {% if session.get('usuario_nome') %}
           <a href="{{ url_for('main.logout') }}" class="btn btn-sm btn-outline-light" style="min-height: 36px;">Sair</a>
-        </div>
-      {% endif %}
+        {% endif %}
+      </div>
     </div>
   </header>
   <main class="container pb-5" style="max-width: 540px;">
@@ -34,5 +44,16 @@
     {% endwith %}
     {% block content %}{% endblock %}
   </main>
+  <script>
+    function toggleA11y() {
+      const ativo = document.body.classList.toggle('acessivel');
+      localStorage.setItem('produfol_a11y', ativo ? '1' : '0');
+      document.getElementById('btn-a11y').setAttribute('aria-pressed', ativo);
+    }
+    if (localStorage.getItem('produfol_a11y') === '1') {
+      document.body.classList.add('acessivel');
+      document.getElementById('btn-a11y').setAttribute('aria-pressed', 'true');
+    }
+  </script>
 </body>
 </html>
