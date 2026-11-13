@@ -13,8 +13,31 @@
 </div>
 <label for="resumo" class="form-label fw-bold">Resumo para WhatsApp</label>
 <textarea id="resumo" class="form-control mb-3" rows="3" readonly>{{ resumo }}</textarea>
-<button type="button" class="btn btn-produfol w-100 mb-2" onclick="navigator.clipboard.writeText(document.getElementById('resumo').value)">
+<button type="button" id="btn-copiar" class="btn btn-produfol w-100 mb-2" onclick="copiarResumo()">
   COPIAR PARA WHATSAPP
 </button>
+<div id="feedback-copia" class="small fw-bold text-success mb-2" role="status" aria-live="polite"></div>
 <a href="{{ url_for('main.nova_recomendacao') }}" class="btn btn-outline-dark w-100">+ Novo Cálculo</a>
+
+<script>
+  async function copiarResumo() {
+    const campo = document.getElementById('resumo');
+    const botao = document.getElementById('btn-copiar');
+    const feedback = document.getElementById('feedback-copia');
+    if (!campo) return;
+
+    try {
+      await navigator.clipboard.writeText(campo.value);
+    } catch (e) {
+      campo.select();
+      document.execCommand('copy');
+    }
+
+    botao.textContent = '✓ RESUMO COPIADO!';
+    feedback.textContent = 'Texto transferido para a área de transferência. Pronto para colar no WhatsApp.';
+    setTimeout(() => {
+      botao.textContent = 'COPIAR PARA WHATSAPP';
+    }, 3000);
+  }
+</script>
 {% endblock %}
