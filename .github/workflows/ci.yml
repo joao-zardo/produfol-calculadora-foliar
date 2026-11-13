@@ -20,4 +20,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Executar testes com Pytest
-        run: pytest -v
+        run: python -m pytest -v
