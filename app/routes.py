@@ -163,3 +163,12 @@ def historico():
         query = query.filter(Produtor.nome.ilike(f"%{busca}%"))
     lista = query.all()
     return render_template("cadastros.html", modo="historico", recomendacoes=lista, busca=busca)
+
+
+@bp.route("/health")
+def health_check():
+    try:
+        db.session.execute(db.text("SELECT 1"))
+        return {"status": "healthy", "service": "produfol-calculadora-foliar", "database": "connected"}, 200
+    except Exception as err:
+        return {"status": "unhealthy", "error": str(err)}, 500
